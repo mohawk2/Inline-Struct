@@ -1,0 +1,69 @@
+INTRODUCTION
+
+Inline::Struct -- Manipulate C structs directly from Perl.
+
+Inline::Struct lets you bind C structs to Perl. No special work required, you
+just tell Inline that you want to bind to structs as well as functions.
+
+Example:
+
+   use Inline C;
+
+   my $o = new Inline::Struct::JA_H("Perl");
+   print JAxH($o), "\n";
+   $o->x("Inline");
+   print JAxH($o), "\n";
+
+   __END__
+   __C__
+   struct JA_H {
+      char *x;
+   };
+   typedef struct JA_H JA_H;
+
+   SV *JAxH(JA_H *f) { 
+      return newSVpvf("Just Another %s Hacker", f->x);
+   }
+
+When run, this complete program prints:
+
+   Just Another Perl Hacker
+   Just Another Inline Hacker
+
+-----------------------------------------------------------------------------
+FEATURES:
+
+Inline::Struct is an alpha release. It includes:
+
++ Preliminary support for C structs.
++ Supported in Inline::C and Inline::CPP.
+
+-----------------------------------------------------------------------------
+INSTALLATION:
+
+This module requires Inline::C version 0.33 or higher to be installed.
+
+To install Inline::Struct do this:
+
+perl Makefile.PL
+make
+make test
+make install
+
+(On ActivePerl for MSWin32, use nmake instead of make.)
+
+You have to 'make install' before you can run it successfully.
+
+-----------------------------------------------------------------------------
+INFORMATION:
+
+- For more information on Inline::CPP see 'perldoc Inline::CPP'.
+- For information about Inline.pm, see 'perldoc Inline'.
+- For information on using Perl with C or C++, see 'perldoc perlapi'.
+
+The Inline mailing list in inline@perl.org. Send mail to 
+inline-subscribe@perl.org to subscribe.
+
+Please send questions and comments to "Neil Watkiss" <NEILW@cpan.org>
+
+Copyright (c) 2001, Neil Watkiss. All Rights Reserved.

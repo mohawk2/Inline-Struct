@@ -1,0 +1,10 @@
+MANIFEST
+Makefile.PL
+README
+Struct.pm
+Struct.pod
+TODO
+grammar/grammar.pm
+grammar/Makefile.PL
+t/all.t
+t/anon.t

@@ -7,7 +7,7 @@ require Inline::Struct::grammar;
 use Data::Dumper;
 
 use vars qw($VERSION);
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 #=============================================================================
 # Inline::Struct is NOT an ILSM: no register() function
@@ -28,7 +28,7 @@ sub parse {
     $o->{STRUCT}{'.all'} = 1 
       if $nstructs == 0;
 
-    # Load currently-defined types
+    # Load currently-defined types (stored in $o->{ILSM}{typeconv})
     $o->get_maps;
     $o->get_types;
 
@@ -37,9 +37,9 @@ sub parse {
     my $grammar = Inline::Struct::grammar::grammar()
       or croak "Can't find Struct grammar!\n";
     my $parser = $o->{STRUCT}{'.parser'} = Parse::RecDescent->new($grammar);
-    $parser->{data}{typeconv} = $o->{typeconv};
+    $parser->{data}{typeconv} = $o->{ILSM}{typeconv};
     $parser->code($o->{ILSM}{code});
-    $o->{typeconv} = $parser->{data}{typeconv};
+    $o->{ILSM}{typeconv} = $parser->{data}{typeconv};
 
     $o->{STRUCT}{'.xs'} = "";
     $o->{STRUCT}{'.macros'} = <<END;
@@ -128,7 +128,7 @@ END
 	next unless $maxi > 0;
 
 	$o->{STRUCT}{'.xs'} .= <<END;
-MODULE = $o->{module}		PACKAGE = Inline::Struct::$struct
+MODULE = $o->{API}{module}		PACKAGE = Inline::Struct::$struct
 
 PROTOTYPES: DISABLE
 
@@ -314,10 +314,10 @@ sub write_typemap {
 	$OUTPUT .= $type."\n".$data->{typeconv}{output_expr}{$type};
     }
 
-    $o->mkpath($o->{build_dir})
-      unless -d $o->{build_dir};
+    $o->mkpath($o->{API}{build_dir})
+      unless -d $o->{API}{build_dir};
     my $fh;
-    my $fname = $o->{build_dir}.'/Struct.map'; 
+    my $fname = $o->{API}{build_dir}.'/Struct.map'; 
     open $fh, ">$fname"
       or die $!;
     print $fh <<END;
@@ -342,9 +342,9 @@ sub typeconv {
     my $type = shift;
     my $dir = shift;
     my $preproc = shift;
-    my $tkind = $o->{typeconv}{type_kind}{$type};
+    my $tkind = $o->{ILSM}{typeconv}{type_kind}{$type};
     my $ret =
-      eval qq{qq{$o->{typeconv}{$dir}{$tkind}}};
+      eval qq{qq{$o->{ILSM}{typeconv}{$dir}{$tkind}}};
     chomp $ret;
     $ret =~ s/\n/\\\n/g if $preproc;
     return $ret;

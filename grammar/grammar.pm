@@ -155,7 +155,6 @@ sub alias {
     my $type = shift;
     my $alias = shift;
     $type .= " *"; $alias .= " *"; # because I only deal with pointers.
-    print "Making an alias from $type to $alias\n";
     $parser->{data}{typeconv}{valid_types}{$alias}++;
     $parser->{data}{typeconv}{valid_rtypes}{$alias}++;
     $parser->{data}{typeconv}{type_kind}{$alias} =

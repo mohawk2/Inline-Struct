@@ -1,4 +1,3 @@
-Open:
  o fix new() bug pointed out by "Paul" at inline@perl.org
  o allow assignment to _HASH & _ARRAY (but not _KEYS)
  o change names of _HASH, _ARRAY, and _KEYS (to what?)
@@ -7,10 +6,3 @@ Open:
  o enum support?
  o #define support?
  o type checking in accessors
-
-Closed:
- o struct typemaps should look up extra info either in magic or hash
- o in the absence of STRUCTS and NOSTRUCTS, any structs will be bound
- o allow anonymous structures
- o overloaded STRUCTS operator: STRUCTS => \d+ means all structs
- o make the default behaviour to bind to all structs

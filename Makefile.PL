@@ -3,7 +3,9 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
   NAME => 'Inline::Struct',
   PREREQ_PM => {
-    'Inline' => 0.42,
+    'Inline' => 0.66,
+    'Inline::C' => 0.62,
+    'Test::More' => 0.88,
   },
   VERSION_FROM => 'Struct.pm',
   META_MERGE => {

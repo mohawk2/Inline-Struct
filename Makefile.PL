@@ -8,6 +8,7 @@ WriteMakefile(
     'Test::More' => 0.88,
   },
   VERSION_FROM => 'Struct.pm',
+  realclean => { FILES => '_Inline' },
   META_MERGE => {
     "meta-spec" => { version => 2 },
     resources => {

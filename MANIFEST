@@ -1,4 +1,6 @@
 MANIFEST
+MYMETA.json
+MYMETA.yml
 Makefile.PL
 README
 Struct.pm
@@ -8,3 +10,4 @@ grammar/grammar.pm
 grammar/Makefile.PL
 t/all.t
 t/anon.t
+t/common.pl

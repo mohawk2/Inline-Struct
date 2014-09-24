@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::More;
 
-use Inline C => <<'END', STRUCTS => 1;
+use Inline C => <<'END', structs => 1, force_build => 1;
 struct Foo {
   int inum;
   double dnum;

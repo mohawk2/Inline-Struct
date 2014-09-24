@@ -279,7 +279,7 @@ $field(object, ...)
 	else {
 	    $field2retval;
 	}
-	XPUSHs(retval);
+	XPUSHs(sv_2mortal(retval));
 
 EOF
             $i++;

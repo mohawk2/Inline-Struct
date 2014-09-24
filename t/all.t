@@ -1,7 +1,7 @@
 use Test::More;
 require 't/common.pl';
 
-use Inline C => <<'END', STRUCTS => 1;
+use Inline C => <<'END', structs => 1;
 struct Foo {
   int inum;
   double dnum;

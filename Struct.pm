@@ -256,26 +256,32 @@ END
 		      ($i == $maxi ? "" : "\\") .
 		      "\n"
 		     );
-	    $o->{STRUCT}{'.xs'} .=
-	       ("void\n" .
-	        $field . "(object, ...)\n\t" .
-		$cname . " *object\n" .
-		"    PREINIT:\n" .
-		"\tSV *retval = newSViv(0);\n" .
-		"    PPCODE:\n" .
-		"\tif (items != 1) {\n" .
-		typeconv($o, "object->$field",
-		             "ST(1)",
-			     $type,
-			     "input_expr",
-			    ) . ";\n" .
-		typeconv($o, "object", "retval", "$cname *", "output_expr")."\n" .
-		"\t}\n" .
-		"\telse {\n" .
-		typeconv($o, "object->$field", "retval", $type, "output_expr") .
-		"\n\t}\n\t" .
-		"XPUSHs(retval);\n\n"
-	       );
+	    my $field2st1 = typeconv(
+	      $o, "object->$field", "ST(1)", $type, "input_expr",
+	    );
+	    my $object2retval = typeconv(
+	      $o, "object", "retval", "$cname *", "output_expr",
+	    );
+	    my $field2retval = typeconv(
+	      $o, "object->$field", "retval", $type, "output_expr",
+	    );
+	    $o->{STRUCT}{'.xs'} .= sprintf <<EOF;
+void
+$field(object, ...)
+	$cname *object
+    PREINIT:
+	SV *retval = newSViv(0);
+    PPCODE:
+	if (items != 1) {
+	    $field2st1;
+	    $object2retval;
+	}
+	else {
+	    $field2retval;
+	}
+	XPUSHs(retval);
+
+EOF
             $i++;
 	}
 	$INITA .= "}}\n";

@@ -12,3 +12,4 @@ t/all.t
 t/anon.t
 t/common.pl
 t/refcnt.t
+t/srcmember.t

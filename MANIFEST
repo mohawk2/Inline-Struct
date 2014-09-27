@@ -11,3 +11,4 @@ grammar/Makefile.PL
 t/all.t
 t/anon.t
 t/common.pl
+t/refcnt.t

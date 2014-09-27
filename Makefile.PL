@@ -2,6 +2,7 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
   NAME => 'Inline::Struct',
+  MIN_PERL_VERSION => 5.010, # // operator
   PREREQ_PM => {
     'Inline' => 0.66,
     'Inline::C' => 0.62,

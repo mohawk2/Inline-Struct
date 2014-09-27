@@ -7,6 +7,7 @@ WriteMakefile(
     'Inline' => 0.66,
     'Inline::C' => 0.62,
     'Test::More' => 0.88,
+    'ExtUtils::MakeMaker' => 6.48,
   },
   VERSION_FROM => 'Struct.pm',
   realclean => { FILES => '_Inline' },

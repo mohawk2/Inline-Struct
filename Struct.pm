@@ -83,6 +83,7 @@ END
 	Newz(1564,_IS_targ,1,$cname); \\
 	lookup = newSViv((IV)_IS_targ); \\
 	key = SvPV(lookup, klen); \\
+	sv_2mortal(lookup); \\
 	hv_store(entry, "REFCNT", 6, newSViv(0), 0); \\
 	hv_store(entry, "FREE", 4, newSViv(1), 0); \\
 	hv_store(hv, key, klen, entrv, 0); \\
@@ -163,6 +164,7 @@ DESTROY(object)
     CODE:
         lookup = newSViv((IV)object);
         key = SvPV(lookup, klen);
+	sv_2mortal(lookup);
         if (hv_exists(map, key, klen)) {
             HV *info = (HV*)SvRV(*hv_fetch(map, key, klen, 0));
             SV *refcnt = *hv_fetch(info, "REFCNT", 6, 0);

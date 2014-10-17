@@ -80,6 +80,8 @@ END
 	SV *lookup; \\
 	char *key; \\
 	STRLEN klen; \\
+	ENTER; \\
+	SAVETMPS; \\
 	Newz(1564,_IS_targ,1,$cname); \\
 	lookup = newSViv((IV)_IS_targ); \\
 	key = SvPV(lookup, klen); \\
@@ -87,6 +89,8 @@ END
 	hv_store(entry, "REFCNT", 6, newSViv(0), 0); \\
 	hv_store(entry, "FREE", 4, newSViv(1), 0); \\
 	hv_store(hv, key, klen, entrv, 0); \\
+	FREETMPS; \\
+	LEAVE; \\
 }
 END
 	$FIELDS = "#define INLINE_STRUCT_FIELDS_$struct " .
@@ -162,6 +166,8 @@ DESTROY(object)
         STRLEN klen;
         char *key;
     CODE:
+	ENTER;
+	SAVETMPS;
         lookup = newSViv((IV)object);
         key = SvPV(lookup, klen);
 	sv_2mortal(lookup);
@@ -176,6 +182,8 @@ DESTROY(object)
             else
               sv_dec(refcnt);
         }
+	FREETMPS;
+	LEAVE;
 
 HV *
 _HASH(object)
@@ -265,6 +273,8 @@ $field(object, ...)
     PREINIT:
 	SV *retval = newSViv(0);
     PPCODE:
+	ENTER;
+	SAVETMPS;
 	if (items == 1) {
 	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr")]}
 	}
@@ -284,6 +294,8 @@ $field(object, ...)
 	    ]}
 	    @{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
 	}
+	FREETMPS;
+	LEAVE;
 	XPUSHs(sv_2mortal(retval));
 
 EOF

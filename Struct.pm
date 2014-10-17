@@ -265,12 +265,12 @@ $field(object, ...)
     PREINIT:
 	SV *retval = newSViv(0);
     PPCODE:
-	if (items != 1) {
-	    @{[typeconv($o, "object->$field", "ST(1)", $type, "input_expr")]};
-	    @{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
+	if (items == 1) {
+	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr")]};
 	}
 	else {
-	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr")]};
+	    @{[typeconv($o, "object->$field", "ST(1)", $type, "input_expr")]};
+	    @{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
 	}
 	XPUSHs(sv_2mortal(retval));
 

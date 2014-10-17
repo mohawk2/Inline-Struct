@@ -266,10 +266,22 @@ $field(object, ...)
 	SV *retval = newSViv(0);
     PPCODE:
 	if (items == 1) {
-	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr")]};
+	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr")]}
 	}
 	else {
+	    @{[
+	    $type =~ /^SV\s*\*$/ ?
+		qq{if (object->$field && SvOK(object->$field)) {
+		    SvREFCNT_dec(object->$field);
+		}} : ""
+	    ]}
 	    @{[typeconv($o, "object->$field", "ST(1)", $type, "input_expr")]};
+	    @{[
+	    $type =~ /^SV\s*\*$/ ?
+		qq{if (object->$field && SvOK(object->$field)) {
+		    SvREFCNT_inc(object->$field);
+		}} : ""
+	    ]}
 	    @{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
 	}
 	XPUSHs(sv_2mortal(retval));

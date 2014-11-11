@@ -272,6 +272,7 @@ $field(object, ...)
 	$cname *object
     PREINIT:
 	SV *retval = newSViv(0);
+	int mortalise_retval = 0;
     PPCODE:
 	ENTER;
 	SAVETMPS;
@@ -293,10 +294,12 @@ $field(object, ...)
 		}} : ""
 	    ]}
 	    @{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
+	    mortalise_retval = 1;
 	}
 	FREETMPS;
 	LEAVE;
-	XPUSHs(sv_2mortal(retval));
+	if (mortalise_retval) sv_2mortal(retval);
+	XPUSHs(retval);
 
 EOF
             $i++;

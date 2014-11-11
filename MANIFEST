@@ -11,6 +11,8 @@ grammar/Makefile.PL
 t/all.t
 t/anon.t
 t/common.pl
+t/readme.t
 t/refcnt.t
 t/srcmember.t
 t/svmember.t
+t/synopsis.t

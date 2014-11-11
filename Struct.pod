@@ -4,24 +4,24 @@ Inline::Struct -- Manipulate C structures directly from Perl.
 
 =head1 SYNOPSIS
 
-  use Inline C => config => structs => ['Foo'];
+  use Inline C => 'DATA', structs => ['Foo'];
 
   my $obj = Inline::Struct::Foo->new;
   $obj->num(10);
   $obj->str("Hello");
 
-  myfunc($obj);
+  print myfunc($obj), "\n";
 
   __END__
   __C__
-  
   struct Foo {
     int num;
     char *str;
   };
+  typedef struct Foo Foo;
 
-  void myfunc(Foo *f) {
-    printf("myfunc: num=%i, str='%s'\n", f->num, f->str);
+  SV *myfunc(Foo *f) {
+    return newSVpvf("myfunc: num=%i, str='%s'", f->num, f->str);
   }
 
 This complete program prints:

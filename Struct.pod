@@ -187,6 +187,20 @@ implementation is several times slower. If the Perl object is instead
 implemented as an array-ref, in the class C<PP::Foo::Array>, the numbers
 do not change significantly.
 
+=head2 Memory
+
+The same script also compares memory usage. A typical results run:
+
+  Memory usage
+  10000 x bless [ 7, "string" ], "main": 34592
+  10000 x Inline::Struct::Foo->new: 48816
+  100000 x bless [ 7, "string" ], "main": 139344
+  100000 x Inline::Struct::Foo->new: 279568
+  1000000 x bless [ 7, "string" ], "main": 1186912
+  1000000 x Inline::Struct::Foo->new: 2563728
+
+The memory usage of the struct is around twice as large.
+
 =head1 SEE ALSO
 
 For more information about using C from Perl, see L<Inline::C>. For more

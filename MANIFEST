@@ -6,6 +6,7 @@ README
 Struct.pm
 Struct.pod
 TODO
+benchmark
 grammar/grammar.pm
 grammar/Makefile.PL
 t/all.t

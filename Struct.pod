@@ -165,6 +165,26 @@ or
 
 Disable binding structs to Perl. 
 
+=head1 PERFORMANCE OF STRUCTS AGAINST PERL DATA STRUCTURES
+
+=head2 Time
+
+A script, F<benchmark>, that benchmarks a simple C C<struct> against
+a pure-Perl data structure, is supplied. It should be run a couple of
+times to get everything cached. A typical results run is as follows:
+
+  Faster type          % faster
+  ISF dnum read        13%
+  PP dnum write        259%
+  ISF inum read        28%
+  PP inum write        263%
+  ISF str read         19%
+  PP str write         268%
+
+This shows that reading the struct is faster than a simple object
+implemented as a hash-ref, while writing to a struct in the current
+implementation is several times slower.
+
 =head1 SEE ALSO
 
 For more information about using C from Perl, see L<Inline::C>. For more

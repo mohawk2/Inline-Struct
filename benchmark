@@ -1,0 +1,77 @@
+#!/usr/bin/perl -w
+
+use Benchmark qw(:all);
+use blib;
+use strict;
+use warnings;
+
+my %VALS = (inum => 10, dnum => 3.1415, str => 'Wazzup?');
+my @KEYS = sort keys %VALS;
+my $COUNT = 1_000_000;
+my $FORMAT = "%-20s %s\n";
+my %ACCESSTYPE2CODE = (
+  read  => sub { my ($o, $m, $v) = @_; '' . $o->$m },
+  write => sub { my ($o, $m, $v) = @_; $o->$m($v) },
+);
+
+{
+  package PP::Foo;
+  sub new {
+    my $class = shift;
+    $class = ref $class if ref $class;
+    bless +{ map { ($_ => undef) } @KEYS }, $class;
+  }
+  map {
+    my $key = $_;
+    no strict 'refs';
+    *$key = sub {
+      my $self = shift; $self->{$key} = shift if @_; $self->{$key};
+    };
+  } @KEYS;
+}
+
+use Inline C => <<'END', structs => 1;
+typedef struct {
+    int inum;
+    double dnum;
+    char *str;
+} Foo;
+void suppress_warnings() {}
+END
+
+my $struct = Inline::Struct::Foo->new;
+map { $struct->$_($VALS{$_}) } @KEYS;
+my $pp = PP::Foo->new;
+map { $pp->$_($VALS{$_}) } @KEYS;
+
+my %objtype2obj = ( ISF => $struct, PP => $pp );
+printf $FORMAT, 'Faster type', '% faster';
+map {
+  my $member = $_;
+  map {
+    my $accesstype = $_;
+    my $subresults = cmpthese(
+      timethese(
+	$COUNT,
+	+{
+	  map {
+	    my $objtype = $_;
+	    ("$objtype $member $accesstype" => sub {
+	      $ACCESSTYPE2CODE{$accesstype}->(
+		$objtype2obj{$objtype},
+		$member,
+		$VALS{$member},
+	      );
+	    })
+	  } sort keys %objtype2obj
+	},
+	'none',
+      ),
+      'none',
+    );
+    printf $FORMAT, @{ $subresults->[2] }[0, 2];
+  } sort keys %ACCESSTYPE2CODE
+} @KEYS;
+
+
+#timethis(100000, sub { $x++ * 30 })'

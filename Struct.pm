@@ -7,7 +7,7 @@ require Inline::Struct::grammar;
 use Data::Dumper;
 
 use vars qw($VERSION);
-$VERSION = '0.14';
+$VERSION = '0.15';
 
 #=============================================================================
 # Inline::Struct is NOT an ILSM: no register() function

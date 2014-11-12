@@ -11,6 +11,7 @@ grammar/grammar.pm
 grammar/Makefile.PL
 t/all.t
 t/anon.t
+t/argorder.t
 t/common.pl
 t/copyref.t
 t/oneline.t

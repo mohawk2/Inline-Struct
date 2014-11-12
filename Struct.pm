@@ -133,6 +133,7 @@ END
 	next unless $maxi > 0;
 
 	$o->{STRUCT}{'.xs'} .= <<END;
+
 MODULE = $o->{API}{module}		PACKAGE = Inline::Struct::$struct
 
 PROTOTYPES: DISABLE

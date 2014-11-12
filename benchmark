@@ -15,6 +15,24 @@ my %ACCESSTYPE2CODE = (
 );
 
 {
+  package PP::Foo::Array;
+  sub new {
+    my $class = shift;
+    $class = ref $class if ref $class;
+    bless [], $class;
+  }
+  my $FIELDCOUNT = 0;
+  map {
+    my $key = $_;
+    my $field = $FIELDCOUNT++;
+    no strict 'refs';
+    *$key = sub {
+      my $self = shift; $self->[$field] = shift if @_; $self->[$field];
+    };
+  } @KEYS;
+}
+
+{
   package PP::Foo;
   sub new {
     my $class = shift;
@@ -41,7 +59,7 @@ END
 
 my $struct = Inline::Struct::Foo->new;
 map { $struct->$_($VALS{$_}) } @KEYS;
-my $pp = PP::Foo->new;
+my $pp = PP::Foo::Array->new;
 map { $pp->$_($VALS{$_}) } @KEYS;
 
 my %objtype2obj = ( ISF => $struct, PP => $pp );

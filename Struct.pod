@@ -183,7 +183,9 @@ times to get everything cached. A typical results run is as follows:
 
 This shows that reading the struct is faster than a simple object
 implemented as a hash-ref, while writing to a struct in the current
-implementation is several times slower.
+implementation is several times slower. If the Perl object is instead
+implemented as an array-ref, in the class C<PP::Foo::Array>, the numbers
+do not change significantly.
 
 =head1 SEE ALSO
 

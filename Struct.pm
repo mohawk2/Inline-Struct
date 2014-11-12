@@ -23,9 +23,9 @@ sub parse {
     return unless $o->{STRUCT}{'.any'};
 
     # Figure out whether to grab all structs
-    my $nstructs = scalar grep { $_ =~ /^[_a-z][_0-9a-z]*$/i } 
+    my $nstructs = scalar grep { $_ =~ /^[_a-z][_0-9a-z]*$/i }
       keys %{$o->{STRUCT}};
-    $o->{STRUCT}{'.all'} = 1 
+    $o->{STRUCT}{'.all'} = 1
       if $nstructs == 0;
 
     # Load currently-defined types (stored in $o->{ILSM}{typeconv})
@@ -55,12 +55,13 @@ sub parse {
 END
 
     my @struct_list;
-    if ($o->{STRUCT}{'.all'}) { 
-	@struct_list = @{$parser->{data}{structs}} 
+    if ($o->{STRUCT}{'.all'}) {
+	die "No valid structs found" unless $parser->{data}{structs};
+	@struct_list = @{$parser->{data}{structs}};
     }
-    else { 
-	@struct_list = grep { $_ =~ /^[_a-z][_a-z0-9]*$/i } 
-	  keys %{$o->{STRUCT}} 
+    else {
+	@struct_list = grep { $_ =~ /^[_a-z][_a-z0-9]*$/i }
+	  keys %{$o->{STRUCT}}
     }
     for my $struct (@struct_list) {
 	unless (defined $parser->{data}{struct}{$struct}) {
@@ -334,7 +335,7 @@ sub write_typemap {
     my ($TYPEMAP, $INPUT, $OUTPUT);
     for my $struct (@{$data->{structs}}) {
 	my $type = "O_OBJECT_$struct";
-	my @ctypes = grep { $data->{typeconv}{type_kind}{$_} eq $type } 
+	my @ctypes = grep { $data->{typeconv}{type_kind}{$_} eq $type }
 	   keys %{$data->{typeconv}{type_kind}};
 	$TYPEMAP .= join "\n", map { "$_\t\t$type" } @ctypes;
 	$INPUT .= $type."\n".$data->{typeconv}{input_expr}{$type};
@@ -344,7 +345,7 @@ sub write_typemap {
     $o->mkpath($o->{API}{build_dir})
       unless -d $o->{API}{build_dir};
     my $fh;
-    my $fname = $o->{API}{build_dir}.'/Struct.map'; 
+    my $fname = $o->{API}{build_dir}.'/Struct.map';
     open $fh, ">$fname"
       or die $!;
     print $fh <<END;

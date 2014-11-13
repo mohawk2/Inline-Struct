@@ -127,6 +127,7 @@ END
             SV *lookup = newSViv((IV)\$var);
             STRLEN klen;
             char *key = SvPV(lookup, klen);
+            sv_2mortal(lookup);
             if (hv_exists(map, key, klen)) {
                 HV *info = (HV*)SvRV(*hv_fetch(map, key, klen, 0));
                 SV *refcnt = *hv_fetch(info, "REFCNT", 6, 0);

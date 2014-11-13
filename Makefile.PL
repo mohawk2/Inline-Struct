@@ -9,7 +9,7 @@ WriteMakefile(
     'Test::More' => 0.88,
     'ExtUtils::MakeMaker' => 6.48,
   },
-  VERSION_FROM => 'Struct.pm',
+  VERSION_FROM => 'lib/Inline/Struct.pm',
   realclean => { FILES => '_Inline' },
   META_MERGE => {
     "meta-spec" => { version => 2 },

@@ -280,6 +280,10 @@ $field(object, ...)
 	SAVETMPS;
 	if (items == 1) {
 	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr")]}
+	    @{[
+	    # mortalise if not an SV *
+	    $type =~ /^SV\s*\*$/ ? '' : 'mortalise_retval = 1;'
+	    ]}
 	}
 	else {
 	    @{[

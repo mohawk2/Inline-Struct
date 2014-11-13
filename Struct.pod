@@ -174,12 +174,12 @@ a pure-Perl data structure, is supplied. It should be run a couple of
 times to get everything cached. A typical results run is as follows:
 
   Faster type          % faster
-  ISF dnum read        13%
-  PP dnum write        259%
-  ISF inum read        28%
-  PP inum write        263%
-  ISF str read         19%
-  PP str write         268%
+  ISF dnum read        24%
+  PP dnum write        247%
+  ISF inum read        39%
+  PP inum write        231%
+  ISF str read         18%
+  PP str write         264%
 
 This shows that reading the struct is faster than a simple object
 implemented as a hash-ref, while writing to a struct in the current
@@ -193,11 +193,11 @@ The same script also compares memory usage. A typical results run:
 
   Memory usage
   10000 x bless [ 7, "string" ], "main": 34592
-  10000 x Inline::Struct::Foo->new: 48816
+  10000 x Inline::Struct::Foo->new: 45648
   100000 x bless [ 7, "string" ], "main": 139344
-  100000 x Inline::Struct::Foo->new: 279568
-  1000000 x bless [ 7, "string" ], "main": 1186912
-  1000000 x Inline::Struct::Foo->new: 2563728
+  100000 x Inline::Struct::Foo->new: 248080
+  1000000 x bless [ 7, "string" ], "main": 1187024
+  1000000 x Inline::Struct::Foo->new: 2257968
 
 The memory usage of the struct is around twice as large.
 

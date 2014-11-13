@@ -1,13 +1,13 @@
 package Inline::Struct;
 
 use strict;
+use warnings;
 use Carp;
 require Inline;
 require Inline::Struct::grammar;
 use Data::Dumper;
 
-use vars qw($VERSION);
-$VERSION = '0.16';
+our $VERSION = '0.17';
 
 #=============================================================================
 # Inline::Struct is NOT an ILSM: no register() function

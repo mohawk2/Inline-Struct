@@ -1,7 +1,8 @@
 package Inline::Struct::grammar;
 use strict;
+use warnings;
 
-$Inline::Struct::grammar::VERSION = '0.10';
+our $VERSION = '0.11';
 
 sub grammar {
    <<'END';
@@ -163,4 +164,3 @@ sub alias {
 }
 
 1;
-

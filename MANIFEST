@@ -1,14 +1,11 @@
 MANIFEST
-MYMETA.json
-MYMETA.yml
 Makefile.PL
 README
-Struct.pm
-Struct.pod
 TODO
 benchmark
-grammar/grammar.pm
-grammar/Makefile.PL
+lib/Inline/Struct.pm
+lib/Inline/Struct.pod
+lib/Inline/Struct/grammar.pm
 t/all.t
 t/anon.t
 t/argorder.t

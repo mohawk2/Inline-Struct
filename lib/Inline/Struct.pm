@@ -7,7 +7,7 @@ require Inline;
 require Inline::Struct::grammar;
 use Data::Dumper;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 #=============================================================================
 # Inline::Struct is NOT an ILSM: no register() function

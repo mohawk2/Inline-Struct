@@ -46,8 +46,6 @@ sub parse {
 #define NEW_INLINE_STRUCT(_IS_targ,_IS_type) INLINE_STRUCT_NEW_##_IS_type(_IS_targ)
 #define INLINE_STRUCT_FIELDS(_IS_type) INLINE_STRUCT_FIELDS_##_IS_type
 #define INLINE_STRUCT_INIT_LIST(_IS_targ,_IS_type) INLINE_STRUCT_INITL_##_IS_type(_IS_targ)
-#define INLINE_STRUCT_INIT_AREF(_IS_src,_IS_targ,_IS_type) INLINE_STRUCT_INITA_##_IS_type(_IS_src,_IS_targ)
-#define INLINE_STRUCT_INIT_HREF(_IS_src,_IS_targ,_IS_type) INLINE_STRUCT_INITH_##_IS_type(_IS_src,_IS_targ)
 #define INLINE_STRUCT_ARRAY(_IS_src,_IS_targ,_IS_type) INLINE_STRUCT_ARRAY_##_IS_type(_IS_src,_IS_targ)
 #define INLINE_STRUCT_VALUES(_IS_src,_IS_targ,_IS_type) INLINE_STRUCT_ARRAY_##_IS_type(_IS_src,_IS_targ)
 #define INLINE_STRUCT_HASH(_IS_src,_IS_targ,_IS_type) INLINE_STRUCT_HASH_##_IS_type(_IS_src,_IS_targ)
@@ -70,7 +68,7 @@ END
 	}
 	$o->{STRUCT}{'.bound'}{$struct}++;
 	my $cname = $parser->{data}{struct}{$struct}{cname};
-	my ($NEW, $FIELDS, $INITL, $INITA, $INITH, $HASH, $ARRAY, $KEYS);
+	my ($NEW, $FIELDS, $INITL, $HASH, $ARRAY, $KEYS);
 
 	# Set up the initial part of the macros
 	$NEW = <<END;
@@ -97,25 +95,6 @@ END
 	$FIELDS = "#define INLINE_STRUCT_FIELDS_$struct " .
 	  (scalar @{$parser->{data}{struct}{$struct}{fields}}) . "\n";
 	$INITL = "#define INLINE_STRUCT_INITL_$struct(_IS_targ) {\\\n";
-	$INITA = <<END;
-#define INLINE_STRUCT_INITA_$struct(_IS_src,_IS_targ) { \\
-AV *av = (AV*)SvRV(_IS_src); \\
-int l = av_len(av) + 1; \\
-int i; \\
-for (i=0; i<l; i++) { \\
-SV *val = *av_fetch(av, i, 0); \\
-END
-	$INITH = <<END;
-#define INLINE_STRUCT_INITH_$struct(_IS_src,_IS_targ) { \\
-HV *hv = (HV*)SvRV(_IS_src); \\
-int l = hv_iterinit(hv); \\
-int i; \\
-for (i=0; i<l; i++) { \\
-I32 retlen; \\
-HE *he = hv_iternext(hv); \\
-char *k = hv_iterkey(he,&retlen); \\
-SV *val = hv_iterval(hv,he); \\
-END
         $HASH = <<END;
 #define INLINE_STRUCT_HASH_$struct(_IS_src,_IS_targ) \\
 hv_clear(_IS_targ); \\
@@ -147,12 +126,6 @@ new(klass, ...)
     CODE:
 	NEW_INLINE_STRUCT(RETVAL,$struct);
 	if (_items == 0) { }
-	else if (SvROK(ST(1)) && SvTYPE(SvRV(ST(1)))==SVt_PVAV) {
-	    INLINE_STRUCT_INIT_AREF(ST(1),RETVAL,$struct);
-	}
-	else if (SvROK(ST(1)) && SvTYPE(SvRV(ST(1)))==SVt_PVHV) {
-	    INLINE_STRUCT_INIT_HREF(ST(1),RETVAL,$struct);
-	}
 	else {
             INLINE_STRUCT_INIT_LIST(RETVAL,$struct);
 	}
@@ -252,8 +225,6 @@ END
 			    1
 			   ) .
 	       "; \\\n");
-	    $INITA .= qq{$q(i == ${\($i-1)}) \\\n$t; \\\n};
-	    $INITH .= qq{$q(strEQ(k, "$field")) \\\n$t;\\\n};
 	    $HASH .= (qq{{\\\n\tSV*tmp=newSViv(0);\\\n$s \\
 \thv_store(_IS_targ, "$field", $flen, tmp, 0); \\\n}} .
 		      ($i == $maxi ? "" : "\\") .
@@ -310,17 +281,12 @@ $field(object, ...)
 EOF
             $i++;
 	}
-	$INITA .= "}}\n";
 	$INITL .= "}\n";
-	$INITH .=
-	  qq|else \\\n\tcroak("No such field '%s' in $cname\\n", k);}}\n|;
 
 	$o->{STRUCT}{'.macros'} .= <<END;
 $NEW
 $FIELDS
-$INITA
 $INITL
-$INITH
 $HASH
 $ARRAY
 $KEYS

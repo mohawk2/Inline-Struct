@@ -1,14 +1,10 @@
-MANIFEST
-MYMETA.json
-MYMETA.yml
-Makefile.PL
-README
-Struct.pm
-Struct.pod
-TODO
 benchmark
-grammar/grammar.pm
-grammar/Makefile.PL
+lib/Inline/Struct.pm
+lib/Inline/Struct.pod
+lib/Inline/Struct/grammar.pm
+Makefile.PL
+MANIFEST			This list of files
+README
 t/all.t
 t/anon.t
 t/argorder.t
@@ -20,3 +16,4 @@ t/refcnt.t
 t/srcmember.t
 t/svmember.t
 t/synopsis.t
+TODO

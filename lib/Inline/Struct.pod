@@ -60,7 +60,8 @@ Example 1:
 
   my $o = Inline::Struct::Fraction->new(4, 3);
   print $o->numer, $o->denom, "\n";
-  $o->numer(4)->denom(7);
+  $o->numer(4);
+  $o->denom(7);
 
 After the code above has been compiled, Perl's namespace looks a lot like
 the following:
@@ -123,10 +124,7 @@ to field values.
 For each field in the struct, an accessor method will be created which
 lets you get or set the value in the struct. If no arguments are provided,
 the method returns the value of that field. If any arguments are provided,
-the field is set to the first argument, and the modified structure is
-returned. This makes setting multiple fields easy:
-
-   $o->field1(something)->field2(somethingelse);
+set to the first argument.
 
 =head1 C and C++ Configuration Options
 
@@ -174,12 +172,12 @@ a pure-Perl data structure, is supplied. It should be run a couple of
 times to get everything cached. A typical results run is as follows:
 
   Faster type          % faster
-  ISF dnum read        24%
-  PP dnum write        247%
-  ISF inum read        39%
-  PP inum write        231%
-  ISF str read         18%
-  PP str write         264%
+  ISF dnum read        8%
+  PP dnum write        271%
+  ISF inum read        25%
+  PP inum write        243%
+  ISF str read         10%
+  PP str write         272%
 
 This shows that reading the struct is faster than a simple object
 implemented as a hash-ref, while writing to a struct in the current
@@ -192,12 +190,12 @@ do not change significantly.
 The same script also compares memory usage. A typical results run:
 
   Memory usage
-  10000 x bless [ 7, "string" ], "main": 34592
-  10000 x Inline::Struct::Foo->new: 45648
-  100000 x bless [ 7, "string" ], "main": 139344
-  100000 x Inline::Struct::Foo->new: 248080
-  1000000 x bless [ 7, "string" ], "main": 1187024
-  1000000 x Inline::Struct::Foo->new: 2257968
+  10000 x bless [ 7, "string" ], "main": 34608
+  10000 x Inline::Struct::Foo->new: 45680
+  100000 x bless [ 7, "string" ], "main": 139376
+  100000 x Inline::Struct::Foo->new: 248112
+  1000000 x bless [ 7, "string" ], "main": 1187040
+  1000000 x Inline::Struct::Foo->new: 2258016
 
 The memory usage of the struct is around twice as large.
 

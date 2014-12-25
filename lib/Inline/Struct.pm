@@ -270,7 +270,6 @@ $field(object, ...)
 		    SvREFCNT_inc(object->$field);
 		}} : ""
 	    ]}
-	    @{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
 	    mortalise_retval = 1;
 	}
 	FREETMPS;

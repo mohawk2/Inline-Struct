@@ -2,7 +2,7 @@ use Test::More;
 
 # assumes suitable class setup before call
 sub run_struct_tests {
-  my $o = Inline::Struct::Foo->new->inum(10)->dnum(3.1415)->str('Wazzup?');
+  my $o = Inline::Struct::Foo->new;
   $o->inum(10);
   $o->dnum(3.1415);
   $o->str('Wazzup?');

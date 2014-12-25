@@ -17,10 +17,6 @@ my $o = Inline::Struct::Foo->new();
 ($id) = keys %Inline::Struct::Foo::_map_;
 
 is refcnt, 1, 'created';
-my $o2 = $o->inum(10);
-is refcnt, 2, 'when ref saved';
-$o2 = undef;
-is refcnt, 1, 'when ref undef-ed';
 $o->inum(10);
 is refcnt, 1, 'inum';
 $o->dnum(3.1415);

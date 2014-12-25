@@ -20,5 +20,8 @@ WriteMakefile(
 	web => 'https://github.com/mohawk2/Inline-Struct',
       },
     },
+    no_index => {
+      package   => [ 'Inline::Struct::grammar' ],
+    },
   },
 );

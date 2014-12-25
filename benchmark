@@ -7,11 +7,14 @@ use warnings;
 
 my %VALS = (inum => 10, dnum => 3.1415, str => 'Wazzup?');
 my @KEYS = sort keys %VALS;
+$VALS{"set_$_"} = delete $VALS{$_} for @KEYS;
+my @GET_KEYS = map { "get_$_" } @KEYS;
+my @SET_KEYS = map { "set_$_" } @KEYS;
 my $COUNT = 1_000_000;
 my $FORMAT = "%-20s %s\n";
 my %ACCESSTYPE2CODE = (
-  read  => sub { my ($o, $m, $v) = @_; '' . $o->$m },
-  write => sub { my ($o, $m, $v) = @_; $o->$m($v) },
+  read  => sub { my ($o, $m, $v) = @_; $m="get_$m"; '' . $o->$m },
+  write => sub { my ($o, $m, $v) = @_; $m="set_$m"; $o->$m($v) },
 );
 
 {
@@ -26,8 +29,11 @@ my %ACCESSTYPE2CODE = (
     my $key = $_;
     my $field = $FIELDCOUNT++;
     no strict 'refs';
-    *$key = sub {
-      my $self = shift; $self->[$field] = shift if @_; $self->[$field];
+    *{"set_$key"} = sub {
+      my $self = shift; $self->[$field] = shift; $self;
+    };
+    *{"get_$key"} = sub {
+      my $self = shift; $self->[$field];
     };
   } @KEYS;
 }
@@ -42,8 +48,11 @@ my %ACCESSTYPE2CODE = (
   map {
     my $key = $_;
     no strict 'refs';
-    *$key = sub {
-      my $self = shift; $self->{$key} = shift if @_; $self->{$key};
+    *{"set_$key"} = sub {
+      my $self = shift; $self->{$key} = shift; $self;
+    };
+    *{"get_$key"} = sub {
+      my $self = shift; $self->{$key};
     };
   } @KEYS;
 }
@@ -58,9 +67,9 @@ void suppress_warnings() {}
 END
 
 my $struct = Inline::Struct::Foo->new;
-map { $struct->$_($VALS{$_}) } @KEYS;
+map { $struct->$_($VALS{$_}) } @SET_KEYS;
 my $pp = PP::Foo::Array->new;
-map { $pp->$_($VALS{$_}) } @KEYS;
+map { $pp->$_($VALS{$_}) } @SET_KEYS;
 
 my %objtype2obj = ( ISF => $struct, PP => $pp );
 printf $FORMAT, 'Faster type', '% faster';
@@ -78,7 +87,7 @@ map {
 	      $ACCESSTYPE2CODE{$accesstype}->(
 		$objtype2obj{$objtype},
 		$member,
-		$VALS{$member},
+		$VALS{"set_$member"},
 	      );
 	    })
 	  } sort keys %objtype2obj

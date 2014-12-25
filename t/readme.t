@@ -4,7 +4,7 @@ use Inline C => 'DATA', structs => ['JA_H'], force_build => 1;
 
 my $o = Inline::Struct::JA_H->new("Perl");
 is JAxH($o), 'Just Another Perl Hacker', "call 1";
-$o->x("Inline");
+$o->set_x("Inline");
 is JAxH($o), 'Just Another Inline Hacker', "call 2";
 
 done_testing;

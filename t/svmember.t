@@ -10,10 +10,10 @@ END
 
 my $o = Inline::Struct::Foo->new();
 my $HASH = { a => { b => 'c' } };
-$o->hash($HASH);
-is_deeply $o->hash, $HASH, "hashref retrieved";
+$o->set_hash($HASH);
+is_deeply $o->get_hash, $HASH, "hashref retrieved";
 
 $o = Inline::Struct::Foo->new($HASH);
-is_deeply $o->hash, $HASH, "hashref as new retrieved";
+is_deeply $o->get_hash, $HASH, "hashref as new retrieved";
 
 done_testing;

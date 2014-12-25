@@ -3,8 +3,8 @@ use Test::More;
 use Inline C => 'DATA', structs => ['Foo'], force_build => 1;
 
 my $obj = Inline::Struct::Foo->new;
-$obj->num(10);
-$obj->str("Hello");
+$obj->set_num(10);
+$obj->set_str("Hello");
 
 is myfunc($obj), q{myfunc: num=10, str='Hello'};
 

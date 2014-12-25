@@ -7,8 +7,8 @@ Inline::Struct -- Manipulate C structures directly from Perl.
   use Inline C => 'DATA', structs => ['Foo'];
 
   my $obj = Inline::Struct::Foo->new;
-  $obj->num(10);
-  $obj->str("Hello");
+  $obj->set_num(10);
+  $obj->set_str("Hello");
 
   print myfunc($obj), "\n";
 
@@ -59,8 +59,8 @@ Example 1:
   END
 
   my $o = Inline::Struct::Fraction->new(4, 3);
-  print $o->numer, $o->denom, "\n";
-  $o->numer(4)->denom(7);
+  print $o->get_numer, $o->get_denom, "\n";
+  $o->set_numer(4)->set_denom(7);
 
 After the code above has been compiled, Perl's namespace looks a lot like
 the following:
@@ -120,13 +120,17 @@ to field values.
 
 =head2 Accessors
 
-For each field in the struct, an accessor method will be created which
-lets you get or set the value in the struct. If no arguments are provided,
-the method returns the value of that field. If any arguments are provided,
-the field is set to the first argument, and the modified structure is
-returned. This makes setting multiple fields easy:
+For each field in the struct, accessor methods will be created which
+let you get and set the value in the struct.
 
-   $o->field1(something)->field2(somethingelse);
+The C<get_> method returns the value of that field:
+
+   print $o->get_field1;
+
+The C<set_> method sets the field to the first argument, and the modified
+structure is returned. This makes setting multiple fields easy:
+
+   $o->set_field1(something)->set_field2(somethingelse);
 
 =head1 C and C++ Configuration Options
 
@@ -174,12 +178,12 @@ a pure-Perl data structure, is supplied. It should be run a couple of
 times to get everything cached. A typical results run is as follows:
 
   Faster type          % faster
-  ISF dnum read        24%
-  PP dnum write        247%
-  ISF inum read        39%
-  PP inum write        231%
-  ISF str read         18%
-  PP str write         264%
+  ISF dnum read        12%
+  PP dnum write        195%
+  ISF inum read        14%
+  PP inum write        201%
+  ISF str read         5%
+  PP str write         206%
 
 This shows that reading the struct is faster than a simple object
 implemented as a hash-ref, while writing to a struct in the current
@@ -192,12 +196,12 @@ do not change significantly.
 The same script also compares memory usage. A typical results run:
 
   Memory usage
-  10000 x bless [ 7, "string" ], "main": 34592
-  10000 x Inline::Struct::Foo->new: 45648
-  100000 x bless [ 7, "string" ], "main": 139344
-  100000 x Inline::Struct::Foo->new: 248080
-  1000000 x bless [ 7, "string" ], "main": 1187024
-  1000000 x Inline::Struct::Foo->new: 2257968
+  10000 x bless [ 7, "string" ], "main": 96384
+  10000 x Inline::Struct::Foo->new: 45680
+  100000 x bless [ 7, "string" ], "main": 139360
+  100000 x Inline::Struct::Foo->new: 248112
+  1000000 x bless [ 7, "string" ], "main": 1187040
+  1000000 x Inline::Struct::Foo->new: 2257664
 
 The memory usage of the struct is around twice as large.
 

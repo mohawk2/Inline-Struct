@@ -2,13 +2,13 @@ use Test::More;
 
 # assumes suitable class setup before call
 sub run_struct_tests {
-  my $o = Inline::Struct::Foo->new->inum(10)->dnum(3.1415)->str('Wazzup?');
-  $o->inum(10);
-  $o->dnum(3.1415);
-  $o->str('Wazzup?');
-  my %vals = (inum => 10, dnum => 3.1415, str => 'Wazzup?');
-  is $o->$_(), $vals{$_}, $_ for qw(inum str);
-  ok eq_float($o->dnum(), $vals{dnum}), 'dnum';
+  my $o = Inline::Struct::Foo->new->set_inum(10)->set_dnum(3.1415)->set_str('Wazzup?');
+  $o->set_inum(10);
+  $o->set_dnum(3.1415);
+  $o->set_str('Wazzup?');
+  my %vals = (get_inum => 10, get_dnum => 3.1415, get_str => 'Wazzup?');
+  is $o->$_(), $vals{$_}, $_ for qw(get_inum get_str);
+  ok eq_float($o->get_dnum(), $vals{get_dnum}), 'dnum';
   is_deeply [ sort keys %{ $o->_HASH } ], [ qw(dnum inum str) ], '_HASH method';
   is_deeply $o->_KEYS, [ qw(inum dnum str) ], '_KEYS method';
 }

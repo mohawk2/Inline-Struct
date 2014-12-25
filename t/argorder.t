@@ -11,7 +11,7 @@ SV *func(Foo *foo) {
 EOF
 
 my $o = Inline::Struct::Foo->new;
-$o->i(17);
+$o->set_i(17);
 is func($o), 'i=17';
 
 done_testing;

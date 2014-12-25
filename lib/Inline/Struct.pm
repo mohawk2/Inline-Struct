@@ -241,7 +241,34 @@ END
 		     );
 	    $o->{STRUCT}{'.xs'} .= sprintf <<EOF;
 void
-$field(object, ...)
+set_$field(object, ...)
+	$cname *object
+    PREINIT:
+	SV *retval = newSViv(0);
+    PPCODE:
+	ENTER;
+	SAVETMPS;
+	@{[
+	$type =~ /^SV\s*\*$/ ?
+	    qq{if (object->$field && SvOK(object->$field)) {
+		SvREFCNT_dec(object->$field);
+	    }} : ""
+	]}
+	@{[typeconv($o, "object->$field", "ST(1)", $type, "input_expr")]};
+	@{[
+	$type =~ /^SV\s*\*$/ ?
+	    qq{if (object->$field && SvOK(object->$field)) {
+		SvREFCNT_inc(object->$field);
+	    }} : ""
+	]}
+	@{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
+	FREETMPS;
+	LEAVE;
+	sv_2mortal(retval);
+	XPUSHs(retval);
+
+void
+get_$field(object, ...)
 	$cname *object
     PREINIT:
 	SV *retval = newSViv(0);
@@ -249,30 +276,11 @@ $field(object, ...)
     PPCODE:
 	ENTER;
 	SAVETMPS;
-	if (items == 1) {
-	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr")]}
-	    @{[
-	    # mortalise if not an SV *
-	    $type =~ /^SV\s*\*$/ ? '' : 'mortalise_retval = 1;'
-	    ]}
-	}
-	else {
-	    @{[
-	    $type =~ /^SV\s*\*$/ ?
-		qq{if (object->$field && SvOK(object->$field)) {
-		    SvREFCNT_dec(object->$field);
-		}} : ""
-	    ]}
-	    @{[typeconv($o, "object->$field", "ST(1)", $type, "input_expr")]};
-	    @{[
-	    $type =~ /^SV\s*\*$/ ?
-		qq{if (object->$field && SvOK(object->$field)) {
-		    SvREFCNT_inc(object->$field);
-		}} : ""
-	    ]}
-	    @{[typeconv($o, "object", "retval", "$cname *", "output_expr")]};
-	    mortalise_retval = 1;
-	}
+	@{[typeconv($o, "object->$field", "retval", $type, "output_expr")]}
+	@{[
+	# mortalise if not an SV *
+	$type =~ /^SV\s*\*$/ ? '' : 'mortalise_retval = 1;'
+	]}
 	FREETMPS;
 	LEAVE;
 	if (mortalise_retval) sv_2mortal(retval);

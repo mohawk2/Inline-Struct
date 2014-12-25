@@ -11,7 +11,7 @@ Example:
 
   my $o = Inline::Struct::JA_H->new("Perl");
   print JAxH($o), "\n";
-  $o->x("Inline");
+  $o->set_x("Inline");
   print JAxH($o), "\n";
 
   __END__

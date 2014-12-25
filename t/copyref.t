@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::More;
 
-use Inline C => <<'END', structs => 1, force_build => 1, clean_after_build => 0;
+use Inline C => <<'END', structs => 1, force_build => 1;
 struct Foo {
    SV *src;
    SV *dst;

@@ -1,3 +1,7 @@
+0.20 2016-05-02
+
+    - update metadata to use *_requires
+
 0.19 2016-05-02
 
     - include Changes file

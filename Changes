@@ -1,3 +1,7 @@
+0.21 2016-05-02
+
+    - release without accidentally-included experimental code
+
 0.20 2016-05-02
 
     - update metadata to use *_requires

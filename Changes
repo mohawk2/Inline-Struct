@@ -1,3 +1,11 @@
+0.23 2016-05-05
+
+    - include updated Changes
+
+0.22 2016-05-05
+
+    - fix test that relied on Unix-ish shell semantics
+
 0.21 2016-05-02
 
     - release without accidentally-included experimental code

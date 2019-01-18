@@ -18,3 +18,5 @@ t/srcmember.t
 t/svmember.t
 t/synopsis.t
 TODO
+xt/manifest.t
+xt/pod.t

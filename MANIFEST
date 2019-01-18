@@ -1,12 +1,11 @@
-Changes
-MANIFEST
-Makefile.PL
-README
-TODO
 benchmark
+Changes
 lib/Inline/Struct.pm
 lib/Inline/Struct.pod
 lib/Inline/Struct/grammar.pm
+Makefile.PL
+MANIFEST
+README
 t/all.t
 t/anon.t
 t/argorder.t
@@ -18,3 +17,4 @@ t/refcnt.t
 t/srcmember.t
 t/svmember.t
 t/synopsis.t
+TODO

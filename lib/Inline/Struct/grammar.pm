@@ -110,10 +110,9 @@ sub typemap {
     my $perlname = shift;
     my $cname = shift;
 
-    my ($TYPEMAP, $INPUT, $OUTPUT);
     my $type = "O_OBJECT_$perlname";
-    $TYPEMAP .= "$cname *\t\t$type\n";
-    $INPUT .= <<END;
+    my $TYPEMAP = "$cname *\t\t$type\n";
+    my $INPUT = <<END;
     if (sv_isobject(\$arg) && (SvTYPE(SvRV(\$arg)) == SVt_PVMG)) {
 	\$var = (\$type)SvIV((SV*)SvRV( \$arg ));
     }
@@ -122,7 +121,7 @@ sub typemap {
 	XSRETURN_UNDEF;
     }
 END
-    $OUTPUT .= <<END;
+    my $OUTPUT = <<END;
         {
             HV *map = get_hv("Inline::Struct::${perlname}::_map_", 1);
             SV *lookup = newSViv((IV)\$var);

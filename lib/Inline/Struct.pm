@@ -307,7 +307,7 @@ sub write_typemap {
 	my $type = "O_OBJECT_$struct";
 	my @ctypes = grep { $data->{typeconv}{type_kind}{$_} eq $type }
 	   keys %{$data->{typeconv}{type_kind}};
-	$TYPEMAP .= join "\n", map { "$_\t\t$type" } @ctypes;
+	$TYPEMAP .= join "", map { "$_\t\t$type\n" } @ctypes;
 	$INPUT .= $type."\n".$data->{typeconv}{input_expr}{$type};
 	$OUTPUT .= $type."\n".$data->{typeconv}{output_expr}{$type};
     }
@@ -321,7 +321,6 @@ sub write_typemap {
     print $fh <<END;
 TYPEMAP
 $TYPEMAP
-
 INPUT
 $INPUT
 

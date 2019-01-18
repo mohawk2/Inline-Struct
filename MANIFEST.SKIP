@@ -1,0 +1,6 @@
+#!include_default
+\.*\.swp
+^_Inline
+^MANIFEST\.SKIP
+^\.git
+\.bak$

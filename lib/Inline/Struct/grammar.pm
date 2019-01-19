@@ -77,7 +77,7 @@ type: modifier(s?) TYPE star(s?)
 		);
 	}
 
-modifier: 'extern' | 'unsigned' | 'long' | 'short' | 'const' | 'struct'
+modifier: 'extern' | 'unsigned' | 'long' | 'short' | 'const' | 'struct' | 'volatile'
 
 star: '*' | '&'
 

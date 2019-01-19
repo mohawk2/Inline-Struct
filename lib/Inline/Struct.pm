@@ -340,8 +340,9 @@ sub typeconv {
     my $dir = shift;
     my $preproc = shift;
     my $tkind = $o->{ILSM}{typeconv}{type_kind}{$type};
-    my $ret =
-      eval qq{qq{$o->{ILSM}{typeconv}{$dir}{$tkind}}};
+    my $compile = qq{qq{$o->{ILSM}{typeconv}{$dir}{$tkind}}};
+    my $ret = eval $compile;
+    die "Error while compiling: >>>$compile<<<\n$@" if $@;
     chomp $ret;
     $ret =~ s/\n/\\\n/g if $preproc;
     return $ret;

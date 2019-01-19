@@ -18,7 +18,7 @@ part: comment
 	 $thisparser->{data}{struct}{$perlname}{cname} = $cname;
          $thisparser->{data}{struct}{$perlname}{field} = {reverse @fields};
          $thisparser->{data}{struct}{$perlname}{fields} =
-            [ grep { defined $thisparser->{data}{struct}{$perlname}{field}{$_} }
+            [ grep defined $thisparser->{data}{struct}{$perlname}{field}{$_},
               @fields ];
          Inline::Struct::grammar::typemap($thisparser, $perlname, $cname);
 	 Inline::Struct::grammar::alias($thisparser, $cname, $_)

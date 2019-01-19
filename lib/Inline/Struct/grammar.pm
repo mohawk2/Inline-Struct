@@ -13,8 +13,7 @@ part: comment
     | struct
       {
 	 my ($perlname, $cname, $fields, @aliases) = @{$item[1]};
-         my @fields;
-	 push @fields, @$_ for (@$fields);
+         my @fields = map @$_, @$fields;
          push @{$thisparser->{data}{structs}}, $perlname;
 	 $thisparser->{data}{struct}{$perlname}{cname} = $cname;
          $thisparser->{data}{struct}{$perlname}{field} = {reverse @fields};

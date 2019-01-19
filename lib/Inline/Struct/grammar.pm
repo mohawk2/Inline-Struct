@@ -31,21 +31,23 @@ part: comment
 	}
     | ALL
 
-struct: 'struct' IDENTIFIER { $thisparser->{data}{current}="@item[1,2]" }
-        fields ';'
-           {
-	    # [perlname, cname, fields]
-	      [$item[2], "@item[1,2]", $item[4]]
-	   }
+struct: struct_identifier_fields
 	| 'typedef' 'struct' fields IDENTIFIER ';'
 	   {
 	    # [perlname, cname, fields]
 	      [@item[4,4,3]]
 	   }
-	| 'typedef' 'struct' IDENTIFIER fields IDENTIFIER ';'
+	| 'typedef' struct_identifier_fields IDENTIFIER ';'
 	   {
 	      # [perlname, cname, fields, alias]
-	      [$item[3], "@item[2,3]", $item[4], $item[5]]
+	      [@{ $item[2] }, $item[3]]
+	   }
+
+struct_identifier_fields:
+        'struct' IDENTIFIER { $thisparser->{data}{current}="@item[1,2]" } fields ';'
+           {
+	    # [perlname, cname, fields]
+	      [$item[2], "@item[1,2]", $item[4]]
 	   }
 
 typedef: 'typedef' 'struct' IDENTIFIER IDENTIFIER ';'

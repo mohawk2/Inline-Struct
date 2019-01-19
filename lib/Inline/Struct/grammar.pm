@@ -73,12 +73,11 @@ type: modifier(s?) TYPE star(s?)
          $return .= join '',' ',@{$item[3]} if @{$item[3]};
          return undef
            unless (defined $thisparser->{data}{typeconv}{valid_types}{$return} or
-#                   $return eq $thisparser->{data}{current} or 
-		   $return eq $thisparser->{data}{current} . "*"
+		   $return eq $thisparser->{data}{current} . " *"
 		);
 	}
 
-modifier: 'extern' | 'unsigned' | 'long' | 'short' | 'const'
+modifier: 'extern' | 'unsigned' | 'long' | 'short' | 'const' | 'struct'
 
 star: '*' | '&'
 

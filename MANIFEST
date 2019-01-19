@@ -15,6 +15,7 @@ t/multi.t
 t/oneline.t
 t/readme.t
 t/refcnt.t
+t/selfref.t
 t/srcmember.t
 t/svmember.t
 t/synopsis.t

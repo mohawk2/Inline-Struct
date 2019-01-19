@@ -23,7 +23,7 @@ part: comment
               @fields ];
          Inline::Struct::grammar::typemap($thisparser, $perlname, $cname);
 	 Inline::Struct::grammar::alias($thisparser, $cname, $_)
-	   for @aliases[0..$#aliases];
+	   for @aliases;
       }
     | typedef
 	{

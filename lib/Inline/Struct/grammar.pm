@@ -61,9 +61,6 @@ field: comment
        }
 
 IDENTIFIER: /[~_a-z]\w*/i
-	    {
-	      $item[1]
-	    }
 
 comment:  m{\s* // [^\n]* \n }x
 	| m{\s* /\* (?:[^*]+|\*(?!/))* \*/  ([ \t]*)? }x

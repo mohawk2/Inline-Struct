@@ -242,6 +242,7 @@ END
 		      ($i == $maxi ? "" : "\\") .
 		      "\n"
 		     );
+	    my $is_sv = $type =~ /^SV\s*\*$/;
 	    $o->{STRUCT}{'.xs'} .= <<EOF;
 void
 $field(object, ...)
@@ -256,19 +257,19 @@ $field(object, ...)
 	    @{[typeconv($o, "object->$field", "retval", $type, "output_expr", undef, $field)]}
 	    @{[
 	    # mortalise if not an SV *
-	    $type =~ /^SV\s*\*$/ ? '' : 'mortalise_retval = 1;'
+	    $is_sv ? '' : 'mortalise_retval = 1;'
 	    ]}
 	}
 	else {
 	    @{[
-	    $type =~ /^SV\s*\*$/ ?
+	    $is_sv ?
 		qq{if (object->$field && SvOK(object->$field)) {
 		    SvREFCNT_dec(object->$field);
 		}} : ""
 	    ]}
 	    @{[typeconv($o, "object->$field", "ST(1)", $type, "input_expr", undef, $field)]};
 	    @{[
-	    $type =~ /^SV\s*\*$/ ?
+	    $is_sv ?
 		qq{if (object->$field && SvOK(object->$field)) {
 		    SvREFCNT_inc(object->$field);
 		}} : ""

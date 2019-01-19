@@ -53,7 +53,7 @@ typedef: 'typedef' 'struct' IDENTIFIER IDENTIFIER ';'
 	   ["@item[2,3]", $item[4]]
 	}
 
-fields: '{' field(s) '}' { $item[2] }
+fields: '{' field(s) '}' { [ grep ref, @{$item[2]} ] }
 
 field: comment
      | type IDENTIFIER ';'

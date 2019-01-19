@@ -12,7 +12,7 @@ code: part(s) {1}
 part: comment
     | struct
       {
-	 my ($perlname, $cname, $fields, @aliases) = @{$item[1]};
+	 my ($perlname, $cname, $fields) = @{$item[1]};
          my @fields = map @$_, @$fields;
          push @{$thisparser->{data}{structs}}, $perlname;
 	 $thisparser->{data}{struct}{$perlname}{cname} = $cname;
@@ -21,14 +21,8 @@ part: comment
             [ grep defined $thisparser->{data}{struct}{$perlname}{field}{$_},
               @fields ];
          Inline::Struct::grammar::typemap($thisparser, $perlname, $cname);
-	 Inline::Struct::grammar::alias($thisparser, $cname, $_)
-	   for @aliases;
       }
     | typedef
-	{
-	    my ($type,$alias) = @{$item[1]}[0,1];
-	    Inline::Struct::grammar::alias($thisparser, $type, $alias);
-	}
     | ALL
 
 struct: struct_identifier_fields
@@ -39,8 +33,8 @@ struct: struct_identifier_fields
 	   }
 	| 'typedef' struct_identifier_fields IDENTIFIER ';'
 	   {
-	      # [perlname, cname, fields, alias]
-	      [@{ $item[2] }, $item[3]]
+	      Inline::Struct::grammar::alias($thisparser, $item[2][1], $item[3]);
+	      $item[2]
 	   }
 
 struct_identifier_fields:
@@ -52,7 +46,7 @@ struct_identifier_fields:
 
 typedef: 'typedef' 'struct' IDENTIFIER IDENTIFIER ';'
 	{
-	   ["@item[2,3]", $item[4]]
+	   Inline::Struct::grammar::alias($thisparser, "@item[2,3]", $item[4]);
 	}
 
 fields: '{' field(s) '}' { [ grep ref, @{$item[2]} ] }
@@ -153,7 +147,7 @@ sub alias {
     $parser->{data}{typeconv}{valid_types}{$alias}++;
     $parser->{data}{typeconv}{valid_rtypes}{$alias}++;
     $parser->{data}{typeconv}{type_kind}{$alias} =
-      $parser->{data}{typeconv}{type_kind}{$type};
+      $parser->{data}{typeconv}{type_kind}{$type} ||= {};
 }
 
 1;

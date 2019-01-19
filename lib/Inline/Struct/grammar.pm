@@ -103,12 +103,12 @@ sub typemap {
 
     my $type = "O_OBJECT_$perlname";
     my $TYPEMAP = "$cname *\t\t$type\n";
-    my $INPUT = <<END;
-    if (sv_isobject(\$arg) && (SvTYPE(SvRV(\$arg)) == SVt_PVMG)) {
-	\$var = (\$type)SvIV((SV*)SvRV( \$arg ));
+    my $INPUT = <<'END';
+    if (sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG)) {
+	$var = ($type)SvIV((SV*)SvRV( $arg ));
     }
     else {
-	warn ( \\"\${Package}::\$func_name() -- \$var is not a blessed reference\\" );
+	warn ( \"${Package}::$func_name() -- $var is not a blessed reference\" );
 	XSRETURN_UNDEF;
     }
 END

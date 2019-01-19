@@ -68,14 +68,7 @@ IDENTIFIER: /[~_a-z]\w*/i
 comment:  m{\s* // [^\n]* \n }x
 	| m{\s* /\* (?:[^*]+|\*(?!/))* \*/  ([ \t]*)? }x
 
-type:   TYPE star(s?)
-        {
-         $return = $item[1];
-         $return .= join '',' ',@{$item[2]} if @{$item[2]};
-         return undef
-           unless (defined $thisparser->{data}{typeconv}{valid_types}{$return});
-        }
-      | modifier(s) TYPE star(s?)
+type: modifier(s?) TYPE star(s?)
 	{
          $return = $item[2];
          $return = join ' ',@{$item[1]},$return if @{$item[1]};

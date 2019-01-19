@@ -103,11 +103,13 @@ sub typemap {
     my $type = "O_OBJECT_$perlname";
     my $TYPEMAP = "$cname *\t\t$type\n";
     my $INPUT = <<'END';
-    if (sv_isobject($arg) && (SvTYPE(SvRV($arg)) == SVt_PVMG)) {
-	$var = ($type)SvIV((SV*)SvRV( $arg ));
-    }
-    else {
+    if (!sv_isobject($arg)) {
 	warn ( \"$pname() -- $var is not a blessed reference\" );
+	XSRETURN_UNDEF;
+    }
+    $var = ($type)SvIV((SV*)SvRV( $arg ));
+    if (!$var) {
+	warn ( \"$pname() -- $var is null pointer\" );
 	XSRETURN_UNDEF;
     }
 END

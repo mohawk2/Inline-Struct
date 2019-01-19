@@ -242,7 +242,7 @@ END
 		      ($i == $maxi ? "" : "\\") .
 		      "\n"
 		     );
-	    $o->{STRUCT}{'.xs'} .= sprintf <<EOF;
+	    $o->{STRUCT}{'.xs'} .= <<EOF;
 void
 $field(object, ...)
 	$cname *object

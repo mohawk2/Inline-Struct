@@ -108,7 +108,7 @@ sub typemap {
 	$var = ($type)SvIV((SV*)SvRV( $arg ));
     }
     else {
-	warn ( \"${Package}::$func_name() -- $var is not a blessed reference\" );
+	warn ( \"$pname() -- $var is not a blessed reference\" );
 	XSRETURN_UNDEF;
     }
 END

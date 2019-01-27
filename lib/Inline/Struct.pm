@@ -345,6 +345,7 @@ sub typeconv {
     my $preproc = shift;
     my $pname = shift;
     my $tkind = $o->{ILSM}{typeconv}{type_kind}{$type};
+    die "Error: unknown type '$type'" if !$tkind;
     my $compile = qq{qq{$o->{ILSM}{typeconv}{$dir}{$tkind}}};
     my $ret = eval $compile;
     die "Error while compiling: >>>$compile<<<\n$@" if $@;

@@ -48,10 +48,16 @@ typedef: 'typedef' 'struct' IDENTIFIER IDENTIFIER ';'
 	{
 	   Inline::Struct::grammar::alias($thisparser, "@item[2,3]", $item[4]);
 	}
-	| 'typedef' (/[^\s\(]+/)(s) '(' '*' IDENTIFIER ')' '(' (/[^\s\)]+/)(s) ')' ';'
+	| 'typedef' function_pointer ';'
 	{
 	   # a function-pointer typedef
-	   Inline::Struct::grammar::ptr_register($thisparser, $item[5]);
+	   Inline::Struct::grammar::ptr_register($thisparser, $item[2][1]);
+	}
+
+function_pointer: (/[^\s\(]+/)(s) '(' '*' IDENTIFIER ')' '(' (/[^\s\)]+/)(s) ')'
+	{
+           # (rettype, l, l, ident, l, l, args)
+	   [join('',@{$item[1]}), $item[4], join('',@{$item[7]})]
 	}
 
 fields: '{' field(s) '}' { [ grep ref, @{$item[2]} ] }

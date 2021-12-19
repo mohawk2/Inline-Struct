@@ -48,6 +48,10 @@ typedef: 'typedef' 'struct' IDENTIFIER IDENTIFIER ';'
 	{
 	   Inline::Struct::grammar::alias($thisparser, "@item[2,3]", $item[4]);
 	}
+	| 'typedef' enum IDENTIFIER ';'
+	{
+	   Inline::Struct::grammar::_register_type($thisparser, $item[3], "T_IV");
+	}
 	| 'typedef' function_pointer ';'
 	{
 	   # a function-pointer typedef
@@ -58,6 +62,11 @@ function_pointer: (/[^\s\(]+/)(s) '(' '*' IDENTIFIER ')' '(' (/[^\s\)]+/)(s) ')'
 	{
            # (rettype, l, l, ident, l, l, args)
 	   [join('',@{$item[1]}), $item[4], join('',@{$item[7]})]
+	}
+
+enum: 'enum' '{' (/[^\s\}]+/)(s) '}'
+	{
+	   $item[3];
 	}
 
 fields: '{' field(s) '}' { [ grep ref, @{$item[2]} ] }
@@ -78,6 +87,10 @@ type_identifier: TYPE(s) star(s?) IDENTIFIER(?) ';'
          my $type = join ' ', @{$item[1]};
          $type .= join '',' ',@{$item[2]} if @{$item[2]};
          [ $type, $identifier ];
+	}
+	| enum IDENTIFIER ';'
+	{
+         [ 'IV', $item[2] ];
 	}
 	| function_pointer ';'
 	{

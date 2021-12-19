@@ -1,4 +1,5 @@
 - add inline function-pointer fields not just typedef - fix RT#140493
+- allow inline enum fields, also typedef-ed enum - fix RT#140492
 
 0.27 2019-01-27
     - handle function-pointers

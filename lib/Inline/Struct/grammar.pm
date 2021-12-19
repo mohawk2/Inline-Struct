@@ -79,6 +79,10 @@ type_identifier: TYPE(s) star(s?) IDENTIFIER(?) ';'
          $type .= join '',' ',@{$item[2]} if @{$item[2]};
          [ $type, $identifier ];
 	}
+	| function_pointer ';'
+	{
+         [ 'void *', $item[1][1] ];
+	}
 
 star: '*' | '&'
 

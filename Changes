@@ -1,3 +1,5 @@
+- allow more ways of using enums as struct fields
+
 0.29 2021-12-20
 - tests now run in parallel - thanks @ppisar
 

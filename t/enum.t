@@ -22,11 +22,19 @@ struct Foo3 {
   double dnum;
   char *str;
 };
+
+typedef enum inum4_e {X4,Y4,Z4} inum4_t;
+struct Foo4 {
+  inum4_t inum;
+  double dnum;
+  char *str;
+};
 void suppress_warnings() {}
 END
 
 run_struct_tests();
 run_struct_tests('Foo2');
 run_struct_tests('Foo3');
+run_struct_tests('Foo4');
 
 done_testing;

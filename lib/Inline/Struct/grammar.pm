@@ -52,6 +52,10 @@ typedef: 'typedef' 'struct' IDENTIFIER IDENTIFIER ';'
 	{
 	   Inline::Struct::grammar::_register_type($thisparser, $item[3], "T_IV");
 	}
+	| 'typedef' enum_label IDENTIFIER ';'
+	{
+	   Inline::Struct::grammar::_register_type($thisparser, $item[3], "T_IV");
+	}
 	| 'typedef' function_pointer ';'
 	{
 	   # a function-pointer typedef
@@ -69,6 +73,9 @@ enum_list: '{' (/[^\s\}]+/)(s) '}'
 
 enum: 'enum' enum_list
 	{ $item[2] }
+
+enum_label: 'enum' IDENTIFIER enum_list
+	{ [ @item[1,2] ] }
 
 fields: '{' field(s) '}' { [ grep ref, @{$item[2]} ] }
 

@@ -64,10 +64,11 @@ function_pointer: (/[^\s\(]+/)(s) '(' '*' IDENTIFIER ')' '(' (/[^\s\)]+/)(s) ')'
 	   [join('',@{$item[1]}), $item[4], join('',@{$item[7]})]
 	}
 
-enum: 'enum' '{' (/[^\s\}]+/)(s) '}'
-	{
-	   $item[3];
-	}
+enum_list: '{' (/[^\s\}]+/)(s) '}'
+	{ $item[2] }
+
+enum: 'enum' enum_list
+	{ $item[2] }
 
 fields: '{' field(s) '}' { [ grep ref, @{$item[2]} ] }
 

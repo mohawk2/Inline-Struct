@@ -9,9 +9,16 @@ struct Foo {
   char *str;
 };
 
-typedef enum {X2,Y2,Z2} inum_t;
+typedef enum {X2,Y2,Z2} inum2_t;
 struct Foo2 {
-  inum_t inum;
+  inum2_t inum;
+  double dnum;
+  char *str;
+};
+
+enum inum3_e {X3,Y3,Z3};
+struct Foo3 {
+  enum inum3_e inum;
   double dnum;
   char *str;
 };
@@ -20,5 +27,6 @@ END
 
 run_struct_tests();
 run_struct_tests('Foo2');
+run_struct_tests('Foo3');
 
 done_testing;

@@ -80,7 +80,12 @@ IDENTIFIER: /[~_a-z]\w*/i
 comment:  m{\s* // [^\n]* \n }x
 	| m{\s* /\* (?:[^*]+|\*(?!/))* \*/  ([ \t]*)? }x
 
-type_identifier: TYPE(s) star(s?) IDENTIFIER(?) ';'
+type_identifier:
+	'enum' IDENTIFIER IDENTIFIER ';'
+	{
+         [ 'IV', $item[3] ];
+	}
+	| TYPE(s) star(s?) IDENTIFIER(?) ';'
 	{
          my ($identifier) = @{ $item[3] };
          $identifier = pop @{$item[1]}
